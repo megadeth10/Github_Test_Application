@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+include ':app', ':topsnackbar'
 rootProject.name = "Github Test Application"
-include ':app'

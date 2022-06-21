@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Github Test Application</string>
+    <string name="btn_close">닫기</string>
+    <string name="btn_confirm">확인</string>
 </resources>

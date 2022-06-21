@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+    <declare-styleable name="SnackbarLayout">
+        <attr name="android:maxWidth" />
+        <attr name="elevation" />
+        <attr name="maxActionInlineWidth" format="dimension" />
+    </declare-styleable>
+</resources>

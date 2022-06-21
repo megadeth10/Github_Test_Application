@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="design_snackbar_padding_vertical" tools:override="true">5dp</dimen>
+    <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">24dp</dimen>
+</resources>

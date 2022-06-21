@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 30
+        versionCode 10
+        versionName "1.9"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        staging {
+            initWith debug
+        }
+
+        // 화면 개발용
+        screen {
+            initWith debug
+        }
+    }
+}
+
+
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'topsnackbar'
+
+    publishedGroupId = 'com.androidadvance'
+    libraryName = 'topsnackbar'
+    artifact = 'topsnackbar'
+
+    libraryDescription = 'A Snackbar showing on top (Android).'
+
+    siteUrl = 'https://github.com/AndreiD/TSnackBar'
+    gitUrl = 'https://github.com/AndreiD/TSnackBar.git'
+
+    libraryVersion = '1.1.1'
+
+    developerId = 'andreid'
+    developerName = 'Andrei Dan'
+    developerEmail = 'danandreist@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+
+
+configurations {
+    javadocDeps
+}
+
+dependencies {
+    implementation 'com.android.support:support-annotations:24.1.1'
+    javadocDeps 'com.android.support:support-annotations:24.1.1'
+    implementation 'com.android.support:design:24.1.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+}
