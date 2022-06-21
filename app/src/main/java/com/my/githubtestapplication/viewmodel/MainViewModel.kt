@@ -25,12 +25,13 @@ class MainViewModel : BaseNetworkViewModel() {
         this.setProgress(true)
         CoroutineScope(Dispatchers.IO).launch {
             Thread.sleep(2000)
+            this@MainViewModel.setProgress(false)
             if (DummyObject.checkLogIn(id = id, pw = pw)) {
                 this@MainViewModel.setData("success!")
             } else {
                 this@MainViewModel.setData("fail!")
             }
-            this@MainViewModel.setProgress(false)
+
         }
     }
 
