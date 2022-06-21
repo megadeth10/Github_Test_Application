@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="circleProgressBarStyle">
+        <item name="android:indeterminateTint">@color/red_point</item>
+    </style>
+    <style name="circleProgressBarTextStyle">
+        <item name="background">@color/bg_color_20</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>

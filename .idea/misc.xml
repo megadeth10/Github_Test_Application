@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/bg_transparent_ripple.xml" value="0.1175" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/layout/layout_circle_progress.xml" value="0.378125" />
       </map>
     </option>
   </component>
