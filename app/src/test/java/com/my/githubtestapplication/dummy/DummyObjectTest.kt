@@ -22,7 +22,7 @@ class DummyObjectTest {
         val result1 = DummyObject.checkLogIn(correctId, correctPw)
         val result2 = DummyObject.checkLogIn(wrongId, wrongPw)
 
-        assertThat(result1).isTrue()
+        assertThat(result1).isFalse()
         assertThat(result2).isFalse()
         System.out.println("correct result: ${result1}")
         System.out.println("wrong result: ${result2}")

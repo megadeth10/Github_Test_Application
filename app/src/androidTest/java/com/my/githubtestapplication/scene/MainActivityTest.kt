@@ -54,6 +54,6 @@ class MainActivityTest {
         closeSoftKeyboard()
         onView(withId(R.id.btn_login)).perform(click())
         Thread.sleep(3000)
-        onView(withId(R.id.tv_result)).check(matches(allOf(isDisplayed(), withText(failText))))
+        onView(withId(R.id.tv_result)).check(matches(allOf(isDisplayed(), withText(successText))))
     }
 }
