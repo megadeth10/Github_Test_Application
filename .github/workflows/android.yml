@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: checkout
-        uses: action:checkout@v3
+        uses: action/checkout@v3
 
       - name: AndroidJunitTest
         uses: reactivecircus/android-emulator-runner@v2
