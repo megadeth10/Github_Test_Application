@@ -7,6 +7,18 @@ on:
     branches: [ "master" ]
 
 jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: action:checkout@v3
+
+      - name: AndroidJunitTest
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 32
+          script: ./gradlew connectedCheck
+#jobs:
 #  build:
 #
 #    runs-on: ubuntu-latest
@@ -29,14 +41,3 @@ jobs:
 #    - name: JUnit Test
 #      run: ./gradlew testDebugUnitTest
 
-  test:
-    runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: action:checkout@v3
-
-    - name: AndroidJunitTest
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 32
-        script: ./gradlew connectedCheck
