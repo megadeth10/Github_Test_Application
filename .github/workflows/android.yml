@@ -29,6 +29,7 @@ jobs:
 #    - name: Print Hello World
 #      run: echo "Hello World"
     - name: Upload test APK
+      run: git config --global --add safe.directory /github/workspace # fatal: unsafe repository ('/github/workspace' is owned by someone else)
       uses: actions/upload-artifact@v3
       with:
         name: debug-apk
