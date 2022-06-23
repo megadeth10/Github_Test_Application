@@ -45,8 +45,8 @@ jobs:
         file: app/build/outputs/apk/debug/**.apk
 
   unit_test_job:
+    continue-on-error: false
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -64,6 +64,7 @@ jobs:
         path: app/build/reports/
 
   ui_test_job:
+    continue-on-error: false
     runs-on: macos-latest
     strategy:
         matrix:
