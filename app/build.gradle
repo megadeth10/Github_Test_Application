@@ -9,7 +9,8 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.my.githubtestapplication"
+//        applicationId "com.my.githubtestapplication"
+        applicationId "com.deleo.c2cmarketplace"
         minSdk 23
         targetSdk 32
         versionCode 1
