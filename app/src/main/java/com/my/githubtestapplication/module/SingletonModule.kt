@@ -1,6 +1,8 @@
 package com.my.githubtestapplication.module
 
 import android.content.Context
+import com.my.githubtestapplication.network.Network
+import com.my.githubtestapplication.network.api.PostService
 import com.my.githubtestapplication.securepreference.SecureSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -18,4 +20,12 @@ class SingletonModule {
     @Singleton
     fun getSecureSharedPreferences(@ApplicationContext context : Context) =
         SecureSharedPreferences(context)
+
+    @Provides
+    @Singleton
+    fun getNetwork() = Network()
+
+    @Provides
+    @Singleton
+    fun getPostService(network : Network) = PostService(network)
 }

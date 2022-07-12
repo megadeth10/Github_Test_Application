@@ -14,7 +14,8 @@ class Network {
 
     private fun getLogInterceptor() : HttpLoggingInterceptor {
         val logger = if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor.Level.BODY
+//            HttpLoggingInterceptor.Level.BODY
+            HttpLoggingInterceptor.Level.NONE
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
@@ -30,7 +31,7 @@ class Network {
     }
 
     fun getRetrofit(): Retrofit {
-        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+        return Retrofit.Builder().baseUrl("http://10.0.2.2:3000").addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(this.getHttpClient()).build()
     }
