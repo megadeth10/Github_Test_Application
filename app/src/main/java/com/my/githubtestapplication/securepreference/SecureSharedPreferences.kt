@@ -7,9 +7,8 @@ import androidx.security.crypto.MasterKeys
 import com.my.githubtestapplication.securepreference.callback.SecureStoreCallback
 import com.my.githubtestapplication.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.*
@@ -41,99 +40,90 @@ class SecureSharedPreferences @Inject constructor(@ApplicationContext context : 
      * @param value : store value
      * @param callback : Async thread to end callback(필수는 아님)
      */
-    fun storeString(key : String, value : String, callback : SecureStoreCallback?) {
-        val time = Calendar.getInstance().timeInMillis
-        CoroutineScope(Dispatchers.IO).run {
+    suspend fun storeString(key : String, value : String, callback : SecureStoreCallback?) {
+        withContext(Dispatchers.IO) {
+            val time = Calendar.getInstance().timeInMillis
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             editor.putString(preferenceObject.key, preferenceObject.value as String)
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).run {
-                    Log.e(tagName, "SecurePreferences.setValue() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "SecurePreferences.setValue() finish")
+                it.storeFinish()
             }
-        }
-        Log.e(
-            tagName, String.format(
-                "set() consumed time: %d",
-                Calendar.getInstance().timeInMillis - time
+            Log.e(
+                tagName, String.format(
+                    "set() consumed time: %d",
+                    Calendar.getInstance().timeInMillis - time
+                )
             )
-        )
+        }
     }
 
-    fun storeInt(key : String, value : Int, callback : SecureStoreCallback?) {
-        CoroutineScope(Dispatchers.IO).launch {
+    suspend fun storeInt(key : String, value : Int, callback : SecureStoreCallback?) {
+        withContext(Dispatchers.IO) {
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             editor.putInt(preferenceObject.key, preferenceObject.value as Int)
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).launch {
-                    Log.e(tagName, "storeInt() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "storeInt() finish")
+                it.storeFinish()
             }
         }
     }
 
-    fun storeLong(key : String, value : Long, callback : SecureStoreCallback?) {
-        CoroutineScope(Dispatchers.IO).launch {
+    suspend fun storeLong(key : String, value : Long, callback : SecureStoreCallback?) {
+        withContext(Dispatchers.IO) {
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             editor.putLong(preferenceObject.key, preferenceObject.value as Long)
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).launch {
-                    Log.e(tagName, "storeLong() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "storeLong() finish")
+                it.storeFinish()
             }
         }
     }
 
-    fun storeFloat(key : String, value : Float, callback : SecureStoreCallback?) {
-        CoroutineScope(Dispatchers.IO).launch {
+    suspend fun storeFloat(key : String, value : Float, callback : SecureStoreCallback?) {
+        withContext(Dispatchers.IO) {
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             editor.putFloat(preferenceObject.key, preferenceObject.value as Float)
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).launch {
-                    Log.e(tagName, "storeFloat() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "storeFloat() finish")
+                it.storeFinish()
             }
         }
     }
 
-    fun storeBoolean(
+    suspend fun storeBoolean(
         key : String,
         value : Boolean,
         callback : SecureStoreCallback?
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             editor.putBoolean(preferenceObject.key, preferenceObject.value as Boolean)
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).launch {
-                    Log.e(tagName, "storeBoolean() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "storeBoolean() finish")
+                it.storeFinish()
             }
         }
     }
 
-    fun <T> storeArrayList(
+    suspend fun <T> storeArrayList(
         key : String,
         value : ArrayList<T>,
         callback : SecureStoreCallback?
     ) {
-        val time = Calendar.getInstance().timeInMillis
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
+            Log.e(tagName, "storeArrayList()")
+            val time = Calendar.getInstance().timeInMillis
             val preferenceObject = PreferencesObject(key, value, callback)
             val editor = sharedPreferences.edit()
             val jsonArray = JSONArray()
@@ -149,18 +139,17 @@ class SecureSharedPreferences @Inject constructor(@ApplicationContext context : 
             }
             editor.apply()
             preferenceObject.function?.let {
-                CoroutineScope(Dispatchers.Default).launch {
-                    Log.e(tagName, "storeArrayList() finish")
-                    it.storeFinish()
-                }
+                Log.e(tagName, "storeArrayList() finish")
+                it.storeFinish()
             }
-        }
-        Log.e(
-            tagName, String.format(
-                "storeArrayList() consumed time: %d",
-                Calendar.getInstance().timeInMillis - time
+
+            Log.e(
+                tagName, String.format(
+                    "storeArrayList() consumed time: %d",
+                    Calendar.getInstance().timeInMillis - time
+                )
             )
-        )
+        }
     }
 
     fun getString(key : String, defaultValue : String) : String {
