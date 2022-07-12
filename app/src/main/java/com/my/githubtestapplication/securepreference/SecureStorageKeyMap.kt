@@ -14,4 +14,7 @@ object SecureStorageKeyMap {
     val USER_KEY = "user_key"
 
     val APP_PAUSE_TIME = "pause_time"
+
+    val ID = "id"
+    val PW = "pw"
 }

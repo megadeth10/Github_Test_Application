@@ -4,14 +4,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.my.githubtestapplication.base.BaseNetworkViewModel
 import com.my.githubtestapplication.dummy.DummyObject
+import com.my.githubtestapplication.securepreference.SecureSharedPreferences
+import com.my.githubtestapplication.securepreference.SecureStorageKeyMap
+import com.my.githubtestapplication.securepreference.callback.SecureStoreCallback
+import com.my.githubtestapplication.util.Log
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+import javax.inject.Inject
 
 /**
  * Created by YourName on 2022/06/21.
  */
-class MainViewModel : BaseNetworkViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val secureSharedPreferences : SecureSharedPreferences
+) : BaseNetworkViewModel() {
     private var _data : MutableLiveData<String> = MutableLiveData<String>("")
     val data : MutableLiveData<String> = _data
 
@@ -21,15 +31,34 @@ class MainViewModel : BaseNetworkViewModel() {
         }
     }
 
+    private fun store() {
+        this.setData("success!")
+    }
+
+    private fun fail() {
+        this.setData("fail!")
+    }
+
     fun login(id : String, pw : String) {
         this.setProgress(true)
+        Log.e(tagName, "login()")
         CoroutineScope(Dispatchers.IO).launch {
             Thread.sleep(2000)
             this@MainViewModel.setProgress(false)
             if (DummyObject.checkLogIn(id = id, pw = pw)) {
-                this@MainViewModel.setData("success!")
+                Log.e(tagName, "call preference")
+                secureSharedPreferences.storeArrayList(
+                    SecureStorageKeyMap.ID,
+                    arrayListOf(id, pw),
+                    callback = object: SecureStoreCallback {
+                        override fun storeFinish() {
+                            Log.e(tagName, "call storeFinish()")
+                            store()
+                        }
+                    })
             } else {
-                this@MainViewModel.setData("fail!")
+                fail()
+
             }
 
         }
