@@ -16,6 +16,7 @@ import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by YourName on 2022/07/12.
@@ -39,13 +40,19 @@ class SplashViewModel @Inject constructor(
     private val fetchCommentScope = CoroutineScope(Job() + Dispatchers.IO)
     private var allFetchScope : Job? = null
     private var launchTime: Long = 0
+    private var withContextJob: Job? = null
+
+    private var fetchJob = Job()
+    private var fetchContext: CoroutineContext = fetchJob + Dispatchers.Default
     override fun getLogName() = SplashViewModel::class.simpleName
 
     fun fetchAllStart() {
         Log.e(tagName, "fetchAllStart() start")
         launchTime = Calendar.getInstance().timeInMillis
         //coroutine scope 내에서 하위 scope로 개별 실행된다.
-        allFetchScope = viewModelScope.launch(Dispatchers.IO) {
+        fetchJob = Job()
+        fetchContext = fetchJob + Dispatchers.Default
+        viewModelScope.launch(fetchContext + Dispatchers.IO) {
             launch {
                 fetchPosts { fetchPostResult(it) }
             }
@@ -143,11 +150,11 @@ class SplashViewModel @Inject constructor(
 
     @Suppress("OPT_IN_IS_NOT_ENABLED")
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun fetchTwoDocs() = viewModelScope.launch(Dispatchers.IO) {
+    private fun fetchTwoDocs() = viewModelScope.launch(fetchContext + Dispatchers.IO) {
         Log.e(tagName, "fetchTwoDocs() start")
         val deferreds = listOf( async { fetchDoc1() }, async { fetchDoc2() })
         deferreds.awaitAll()
-        asyncResult(deferreds[0].getCompleted() as Int, deferreds[1].getCompleted() as String)
+        asyncResult(deferreds[0].await() as Int, deferreds[1].await() as String)
 //        개별 호출
 //        val fetch1 = async { fetchDoc1() }
 //        val fetch2 = async { fetchDoc2() }
@@ -156,7 +163,7 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun checkEndStep(complete : () -> Unit = ::endStep, fail : () -> Unit = ::notEndStep) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(fetchContext + Dispatchers.Default) {
             if (
                 this@SplashViewModel.endLogoAnimation &&
                 this@SplashViewModel.postList.size > 0 &&
@@ -172,12 +179,42 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun endStep() {
+        fetchJob.cancel()
         Log.e(tagName, "endStep() endTime ${Calendar.getInstance().timeInMillis - launchTime}")
         UserAlertReceiver.sendAction(context, "complete all step", ACTION_SHOW_SNACKBAR)
     }
 
     private fun notEndStep() {
         UserAlertReceiver.sendAction(context, "not complete")
+    }
+
+    suspend fun testWithContext(setResult : (String) -> Unit) {
+        withContextJob = viewModelScope.launch(Dispatchers.IO) {
+            for(i in 0..10) {
+                delay(1_000)
+                Log.e(tagName, "testWithContext() outter value i :$i")
+//                val aaa = withContext(Dispatchers.Main) {
+//                    for(j in 0..10) {
+//                        delay(100)
+//                        setResult(j.toString())
+//                    }
+//                    return@withContext "111"
+//                }
+//                Log.e(tagName, "testWithContext() withContext value aaa :$aaa")
+                launch {
+                    for(j in 0..10) {
+                        delay(100)
+                        Log.e(tagName, "testWithContext() innner value j :$j")
+                        setResult(j.toString())
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun stopContextJob() {
+        withContextJob?.cancel()
     }
 
     override fun onCleared() {

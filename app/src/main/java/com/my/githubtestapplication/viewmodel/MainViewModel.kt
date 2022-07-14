@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.my.githubtestapplication.base.BaseNetworkViewModel
 import com.my.githubtestapplication.dummy.DummyObject
+import com.my.githubtestapplication.network.api.PostService
 import com.my.githubtestapplication.securepreference.SecureSharedPreferences
 import com.my.githubtestapplication.securepreference.SecureStorageKeyMap
 import com.my.githubtestapplication.securepreference.callback.SecureStoreCallback
@@ -42,7 +43,7 @@ class MainViewModel @Inject constructor(
     fun login(id : String, pw : String) {
         this.setProgress(true)
         Log.e(tagName, "login()")
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             Thread.sleep(2000)
             this@MainViewModel.setProgress(false)
             if (DummyObject.checkLogIn(id = id, pw = pw)) {
