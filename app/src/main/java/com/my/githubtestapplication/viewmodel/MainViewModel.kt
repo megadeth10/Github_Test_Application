@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.my.githubtestapplication.base.BaseNetworkViewModel
 import com.my.githubtestapplication.dummy.DummyObject
+import com.my.githubtestapplication.module.LogRepository
 import com.my.githubtestapplication.network.api.PostService
 import com.my.githubtestapplication.securepreference.SecureSharedPreferences
 import com.my.githubtestapplication.securepreference.SecureStorageKeyMap
@@ -21,10 +22,15 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val secureSharedPreferences : SecureSharedPreferences
+    private val secureSharedPreferences : SecureSharedPreferences,
+    private val logRepository: LogRepository,
 ) : BaseNetworkViewModel() {
     private var _data : MutableLiveData<String> = MutableLiveData<String>("")
     val data : MutableLiveData<String> = _data
+
+    init {
+        Log.e(tagName, "init() logRepository: $logRepository")
+    }
 
     private fun setData(newString : String) {
         viewModelScope.launch {

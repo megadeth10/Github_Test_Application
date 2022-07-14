@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.my.githubtestapplication.base.BaseNetworkViewModel
+import com.my.githubtestapplication.module.LogDBRepository
+import com.my.githubtestapplication.module.LogRepository
 import com.my.githubtestapplication.network.api.PostService
 import com.my.githubtestapplication.network.response.CommentResponse
 import com.my.githubtestapplication.network.response.Post
@@ -25,6 +27,7 @@ import kotlin.coroutines.CoroutineContext
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val postService : PostService,
+    private val logRepository: LogRepository,
     application : Application
 ) : BaseNetworkViewModel() {
     @SuppressLint("StaticFieldLeak")
@@ -46,6 +49,10 @@ class SplashViewModel @Inject constructor(
     private var fetchContext: CoroutineContext = fetchJob + Dispatchers.Default
     override fun getLogName() = SplashViewModel::class.simpleName
 
+    init {
+        Log.e(tagName, "init() logRepository: $logRepository")
+        Log.e(tagName, "init() postService: $postService")
+    }
     fun fetchAllStart() {
         Log.e(tagName, "fetchAllStart() start")
         launchTime = Calendar.getInstance().timeInMillis
