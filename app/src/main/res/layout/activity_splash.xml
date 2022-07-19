@@ -25,6 +25,13 @@
                 tools:ignore="HardcodedText" />
         </FrameLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_result"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/btn_withContext"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_withContext"
             android:layout_width="match_parent"

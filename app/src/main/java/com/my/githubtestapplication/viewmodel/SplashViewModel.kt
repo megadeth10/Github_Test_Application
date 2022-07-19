@@ -2,6 +2,8 @@ package com.my.githubtestapplication.viewmodel
 
 import android.annotation.SuppressLint
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.my.githubtestapplication.base.BaseNetworkViewModel
 import com.my.githubtestapplication.module.LogDBRepository
@@ -47,6 +49,10 @@ class SplashViewModel @Inject constructor(
 
     private var fetchJob = Job()
     private var fetchContext: CoroutineContext = fetchJob + Dispatchers.Default
+
+    private var _resultText = MutableLiveData<String?>(null)
+    val resultText: LiveData<String?> get() = _resultText
+
     override fun getLogName() = SplashViewModel::class.simpleName
 
     init {
@@ -76,6 +82,12 @@ class SplashViewModel @Inject constructor(
 //        Log.e(tagName, "fetchTwoApi() start")
 //        fetchTwoDocs()
 //    }
+
+    fun setResultText(text: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            this@SplashViewModel._resultText.value = text
+        }
+    }
 
     fun setAnimation(newState:Boolean) {
         if (endLogoAnimation != newState) {
@@ -188,10 +200,12 @@ class SplashViewModel @Inject constructor(
     private fun endStep() {
         fetchJob.cancel()
         Log.e(tagName, "endStep() endTime ${Calendar.getInstance().timeInMillis - launchTime}")
+        setResultText("complete all step")
         UserAlertReceiver.sendAction(context, "complete all step", ACTION_SHOW_SNACKBAR)
     }
 
     private fun notEndStep() {
+        setResultText("not complete")
         UserAlertReceiver.sendAction(context, "not complete")
     }
 

@@ -45,6 +45,11 @@ class SplashActivity : BaseAlertActivity<ActivitySplashBinding>(), View.OnClickL
         this.contentBinding.btnTestException.setOnClickListener(this)
         this.contentBinding.btnNext.setOnClickListener(this)
         this.startAnimation()
+        splashViewModel.resultText.observe(this) {
+            it?.let{
+                this.contentBinding.tvResult.text = it
+            }
+        }
     }
 
     override fun onStart() {
