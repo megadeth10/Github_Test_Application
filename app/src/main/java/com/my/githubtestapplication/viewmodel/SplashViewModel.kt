@@ -50,7 +50,9 @@ class SplashViewModel @Inject constructor(
     private var fetchJob = Job()
     private var fetchContext: CoroutineContext = fetchJob + Dispatchers.Default
 
-    private var _resultText = MutableLiveData<String?>(null)
+    private val failEndMessages = "not complete"
+    private val successEndMessage = "complete all step"
+    private var _resultText = MutableLiveData<String?>(failEndMessages)
     val resultText: LiveData<String?> get() = _resultText
 
     override fun getLogName() = SplashViewModel::class.simpleName
@@ -200,13 +202,13 @@ class SplashViewModel @Inject constructor(
     private fun endStep() {
         fetchJob.cancel()
         Log.e(tagName, "endStep() endTime ${Calendar.getInstance().timeInMillis - launchTime}")
-        setResultText("complete all step")
-        UserAlertReceiver.sendAction(context, "complete all step", ACTION_SHOW_SNACKBAR)
+        setResultText(successEndMessage)
+        UserAlertReceiver.sendAction(context, successEndMessage, ACTION_SHOW_SNACKBAR)
     }
 
     private fun notEndStep() {
-        setResultText("not complete")
-        UserAlertReceiver.sendAction(context, "not complete")
+        setResultText(failEndMessages)
+        UserAlertReceiver.sendAction(context, failEndMessages)
     }
 
     suspend fun testWithContext(setResult : (String) -> Unit) {
