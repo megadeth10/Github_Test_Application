@@ -9,6 +9,7 @@ import com.my.githubtestapplication.base.BaseNetworkViewModel
 import com.my.githubtestapplication.module.LogDBRepository
 import com.my.githubtestapplication.module.LogRepository
 import com.my.githubtestapplication.network.api.PostService
+import com.my.githubtestapplication.network.makeDisposableSingleObserver
 import com.my.githubtestapplication.network.response.CommentResponse
 import com.my.githubtestapplication.network.response.Post
 import com.my.githubtestapplication.network.response.PostResponse
@@ -120,7 +121,7 @@ class SplashViewModel @Inject constructor(
         Log.e(tagName, "fetchComments() start")
         cancelObserver(COMMENT_API)
         addObserver(COMMENT_API,
-            postService.setObserver(postService.getModule().getComments(),
+            postService.getModule().getComments().makeDisposableSingleObserver(
                 onSuccess = {
                     try {
                         val data = (it as ArrayList<CommentResponse>)
@@ -143,7 +144,7 @@ class SplashViewModel @Inject constructor(
         Log.e(tagName, "fetchPosts() start")
         cancelObserver(POST_API)
         addObserver(POST_API,
-            postService.setObserver(postService.getModule().getPosts(),
+            postService.getModule().getPosts().makeDisposableSingleObserver(
                 onSuccess = {
                     val data = (it as PostResponse).data
                     data.let {
